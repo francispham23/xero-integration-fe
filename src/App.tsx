@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { QueryProvider } from "./providers/QueryProvider";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import TabPanel from "./components/TabPanel.tsx";
+import { useTheme } from "@mui/material/styles";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const theme = useTheme();
+  const [value, setValue] = useState(0);
+
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <QueryProvider>
+      <Box sx={{ width: "100%" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          textColor="secondary"
+          indicatorColor="secondary"
+          aria-label="secondary tabs example"
+        >
+          <Tab value={0} label="Accounts" />
+          <Tab value={1} label="Vendors" />
+        </Tabs>
+        <TabPanel value={value} index={0} dir={theme.direction}>
+          Accounts List
+        </TabPanel>
+        <TabPanel value={value} index={1} dir={theme.direction}>
+          Vendors List
+        </TabPanel>
+      </Box>
+    </QueryProvider>
+  );
 }
 
-export default App
+export default App;
