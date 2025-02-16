@@ -5,6 +5,8 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import TabPanel from "./components/TabPanel.tsx";
 import { useTheme } from "@mui/material/styles";
+import { AccountsList } from "./components/Accounts/AccountsList";
+import { VendorsList } from "./components/Vendors/VendorsList";
 
 function App() {
   const theme = useTheme();
@@ -28,10 +30,10 @@ function App() {
           <Tab value={1} label="Vendors" />
         </Tabs>
         <TabPanel value={value} index={0} dir={theme.direction}>
-          Accounts List
+          <AccountsList />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          Vendors List
+          <VendorsList />
         </TabPanel>
       </Box>
     </QueryProvider>
