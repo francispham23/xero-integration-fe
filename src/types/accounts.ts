@@ -1,24 +1,25 @@
 export interface Account {
-  AccountID: string;
-  Code: string;
-  Name: string;
-  Status: string;
-  Type: string;
-  TaxType: string;
-  Class: string;
-  EnablePaymentsToAccount: boolean;
-  ShowInExpenseClaims: boolean;
-  BankAccountNumber?: string;
-  BankAccountType?: string;
-  CurrencyCode: string;
-  ReportingCode: string;
-  ReportingCodeName: string;
+  id: string;
+  code: string;
+  name: string;
+  description: string;
+  status: string;
+  type: string;
+  taxType: string;
+  class: string;
+  enablePaymentsToAccount: boolean;
+  showInExpenseClaims: boolean;
+  bankAccountNumber?: string;
+  bankAccountType?: string;
+  currencyCode: string;
+  reportingCode: string;
+  reportingCodeName: string;
 }
 
 export interface AccountsResponse {
-  Id: string;
-  Status: string;
-  ProviderName: string;
-  DateTimeUTC: string;
-  Accounts: Account[];
+  id: string;
+  status: string;
+  providerName: string;
+  dateTimeUTC: string;
+  accounts: Account[];
 }

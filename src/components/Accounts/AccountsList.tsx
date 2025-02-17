@@ -11,7 +11,9 @@ import {
 } from "@mui/material";
 
 const fetchAccounts = async (): Promise<AccountsResponse> => {
-  const response = await fetch("/data/accounts.json");
+  const response = await fetch("api/xero/local/accounts", {
+    credentials: "include",
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch accounts");
   }
@@ -46,8 +48,8 @@ export const AccountsList = () => {
         Accounts
       </Typography>
       <Box>
-        {data?.Accounts.map((account, index) => (
-          <Box mb={2} key={account.AccountID}>
+        {data?.accounts.map((account, index) => (
+          <Box mb={2} key={account.id}>
             <Card variant="outlined">
               <CardContent>
                 <Box
@@ -57,15 +59,21 @@ export const AccountsList = () => {
                 >
                   <Box>
                     <Typography variant="h6" gutterBottom>
-                      {index + 1}. {account.Name}
+                      {index + 1}. {account.name}
                     </Typography>
                     <Typography color="textSecondary" gutterBottom>
-                      Code: {account.Code}
+                      Code: {account.code}
+                    </Typography>
+                    <Typography color="textSecondary" gutterBottom>
+                      Account ID: {account.id}
+                    </Typography>
+                    <Typography color="textSecondary" gutterBottom>
+                      Description: {account.description}
                     </Typography>
                   </Box>
                   <Chip
-                    label={account.Status}
-                    color={account.Status === "ACTIVE" ? "success" : "default"}
+                    label={account.status}
+                    color={account.status === "ACTIVE" ? "success" : "default"}
                     size="small"
                   />
                 </Box>

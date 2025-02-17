@@ -1,33 +1,33 @@
 export interface Address {
-  AddressType: string;
+  addressType: string;
 }
 
 export interface Balance {
-  Outstanding: number;
-  Overdue: number;
+  outstanding: number;
+  overdue: number;
 }
 
 export interface Balances {
-  AccountsReceivable: Balance;
-  AccountsPayable: Balance;
+  accountsReceivable: Balance;
+  accountsPayable: Balance;
 }
 
-export interface Contact {
-  ContactID: string;
-  ContactNumber?: string;
-  ContactStatus: string;
-  Name: string;
-  FirstName?: string;
-  LastName?: string;
-  EmailAddress?: string;
-  Addresses?: Address[];
-  Balances?: Balances;
+export interface Vendor {
+  id: string;
+  contactNumber?: string;
+  status: string;
+  name: string;
+  firstName?: string;
+  lastName?: string;
+  emailAddress?: string;
+  addresses?: Address[];
+  balances?: Balances;
 }
 
 export interface VendorsResponse {
-  Id: string;
-  Status: string;
-  ProviderName: string;
-  DateTimeUTC: string;
-  Contacts: Contact[];
+  id: string;
+  status: string;
+  providerName: string;
+  dateTimeUTC: string;
+  vendors: Vendor[];
 }

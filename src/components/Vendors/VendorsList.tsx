@@ -12,7 +12,9 @@ import {
 } from "@mui/material";
 
 const fetchVendors = async (): Promise<VendorsResponse> => {
-  const response = await fetch("/data/vendors.json");
+  const response = await fetch("api/xero/local/vendors", {
+    credentials: "include",
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch vendors");
   }
@@ -54,13 +56,13 @@ export const VendorsList = () => {
         Vendors
       </Typography>
       <Box>
-        {data?.Contacts.map((vendor, index) => {
+        {data?.vendors.map((vendor, index) => {
           const outstanding =
-            vendor.Balances?.AccountsPayable?.Outstanding ?? 0;
-          const overdue = vendor.Balances?.AccountsPayable?.Overdue ?? 0;
+            vendor.balances?.accountsPayable?.outstanding ?? 0;
+          const overdue = vendor.balances?.accountsPayable?.overdue ?? 0;
 
           return (
-            <Box mb={2} key={vendor.ContactID}>
+            <Box mb={2} key={vendor.id}>
               <Card variant="outlined">
                 <CardContent>
                   <Box
@@ -70,7 +72,7 @@ export const VendorsList = () => {
                   >
                     <Box>
                       <Typography variant="h6" gutterBottom>
-                        {index + 1}. {vendor.Name}
+                        {index + 1}. {vendor.name}
                       </Typography>
 
                       <Stack spacing={1}>
@@ -86,29 +88,24 @@ export const VendorsList = () => {
                             {formatCurrency(outstanding)}
                           </Typography>
                         </Box>
-                        {overdue > 0 && (
-                          <Box display="flex" gap={1}>
-                            <Typography color="error" variant="body2">
-                              Overdue:
-                            </Typography>
-                            <Typography
-                              color="error"
-                              variant="body2"
-                              fontWeight="medium"
-                            >
-                              {formatCurrency(overdue)}
-                            </Typography>
-                          </Box>
-                        )}
+
+                        <Box display="flex" gap={1}>
+                          <Typography color="error" variant="body2">
+                            Overdue:
+                          </Typography>
+                          <Typography
+                            color="error"
+                            variant="body2"
+                            fontWeight="medium"
+                          >
+                            {formatCurrency(overdue)}
+                          </Typography>
+                        </Box>
                       </Stack>
                     </Box>
                     <Chip
-                      label={vendor.ContactStatus}
-                      color={
-                        vendor.ContactStatus === "ACTIVE"
-                          ? "success"
-                          : "default"
-                      }
+                      label={vendor.status}
+                      color={vendor.status === "ACTIVE" ? "success" : "default"}
                       size="small"
                     />
                   </Box>
