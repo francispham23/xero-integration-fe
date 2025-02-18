@@ -1,26 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { VendorsResponse } from "../../types/vendors";
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Chip,
-  CircularProgress,
-  Alert,
-  Stack,
-} from "@mui/material";
+import { Box, Card, CardContent, Typography, Chip, Stack } from "@mui/material";
 
-const fetchVendors = async (): Promise<VendorsResponse> => {
-  const response = await fetch("api/xero/local/vendors", {
-    credentials: "include",
-  });
-  if (!response.ok) {
-    localStorage.removeItem("section_id");
-    throw new Error("Failed to fetch vendors");
-  }
-  return response.json();
-};
+import { LoadingBox } from "./LoadingBox";
+import { ErrorBox } from "./ErrorBox";
+
+import { fetchVendors } from "../api";
 
 const formatCurrency = (amount: number | undefined) => {
   return new Intl.NumberFormat("en-US", {
@@ -35,21 +19,9 @@ export const VendorsList = () => {
     queryFn: fetchVendors,
   });
 
-  if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" p={4}>
-        <CircularProgress />
-      </Box>
-    );
-  }
+  if (isLoading) return <LoadingBox />;
 
-  if (error) {
-    return (
-      <Box p={4}>
-        <Alert severity="error">Error loading vendors: {error.message}</Alert>
-      </Box>
-    );
-  }
+  if (error) return <ErrorBox error={error} />;
 
   return (
     <Box p={4}>

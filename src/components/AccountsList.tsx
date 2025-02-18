@@ -1,25 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { AccountsResponse } from "../../types/accounts";
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Chip,
-  CircularProgress,
-  Alert,
-} from "@mui/material";
+import { Box, Card, CardContent, Typography, Chip } from "@mui/material";
 
-const fetchAccounts = async (): Promise<AccountsResponse> => {
-  const response = await fetch("api/xero/local/accounts", {
-    credentials: "include",
-  });
-  if (!response.ok) {
-    localStorage.removeItem("section_id");
-    throw new Error("Failed to fetch accounts");
-  }
-  return response.json();
-};
+import { LoadingBox } from "./LoadingBox";
+import { ErrorBox } from "./ErrorBox";
+
+import { fetchAccounts } from "../api";
 
 export const AccountsList = () => {
   const { data, isLoading, error } = useQuery({
@@ -27,21 +12,9 @@ export const AccountsList = () => {
     queryFn: fetchAccounts,
   });
 
-  if (isLoading) {
-    return (
-      <Box display="flex" justifyContent="center" p={4}>
-        <CircularProgress />
-      </Box>
-    );
-  }
+  if (isLoading) return <LoadingBox />;
 
-  if (error) {
-    return (
-      <Box p={4}>
-        <Alert severity="error">Error loading accounts: {error.message}</Alert>
-      </Box>
-    );
-  }
+  if (error) return <ErrorBox error={error} />;
 
   return (
     <Box p={4}>
