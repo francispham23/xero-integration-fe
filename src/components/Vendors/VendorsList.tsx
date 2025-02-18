@@ -16,6 +16,7 @@ const fetchVendors = async (): Promise<VendorsResponse> => {
     credentials: "include",
   });
   if (!response.ok) {
+    localStorage.removeItem("section_id");
     throw new Error("Failed to fetch vendors");
   }
   return response.json();

@@ -19,16 +19,18 @@ function App() {
 
   const urlParams = new URLSearchParams(window.location.search);
   const authStatus = urlParams.get("auth");
+
   const errorMessage = urlParams.get("message");
 
   useEffect(() => {
-    if (authStatus === "success") {
-      // Authentication successful
-      // You can now make API calls to your backend
+    // Check if user is signed in with the same section_id
+    if (authStatus === localStorage.getItem("section_id")) {
       setIsSignedIn(true);
     } else if (authStatus === "error") {
       // Show error message to user
       console.error("Authentication failed:", errorMessage);
+      setIsSignedIn(false);
+      localStorage.removeItem("section_id");
     }
   }, [authStatus, errorMessage]);
 
@@ -38,7 +40,9 @@ function App() {
     });
     const data = await response.json();
     if (data) {
-      window.location.href = data.url;
+      const { url, section_id } = data;
+      localStorage.setItem("section_id", section_id);
+      window.location.href = url;
     }
   };
 
@@ -57,12 +61,13 @@ function App() {
     } catch (error) {
       console.error("Error during sign out:", error);
     }
+    localStorage.removeItem("section_id");
   };
 
   return (
     <QueryProvider>
       <Box sx={{ width: "100%" }}>
-        {isSignedIn ? (
+        {isSignedIn && authStatus ? (
           <Fragment>
             <Tabs
               value={value}

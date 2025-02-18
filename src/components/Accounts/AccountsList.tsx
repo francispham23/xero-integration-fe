@@ -15,6 +15,7 @@ const fetchAccounts = async (): Promise<AccountsResponse> => {
     credentials: "include",
   });
   if (!response.ok) {
+    localStorage.removeItem("section_id");
     throw new Error("Failed to fetch accounts");
   }
   return response.json();
