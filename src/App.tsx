@@ -1,18 +1,17 @@
 import { Fragment, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useTheme } from "@mui/material/styles";
 import { Box, Tabs, Tab } from "@mui/material";
-import Button from "@mui/material/Button";
 
 import TabPanel from "./components/TabPanel";
+import { SignInBox } from "./components/SignInBox";
+import { SignOutBox } from "./components/SignOutBox";
+import { LoadingBox } from "./components/LoadingBox";
 import { VendorsList } from "./components/VendorsList";
 import { AccountsList } from "./components/AccountsList";
 
 import { fetchAuth, fetchDisconnect } from "./api";
-import { LoadingBox } from "./components/LoadingBox";
 
 function App() {
-  const theme = useTheme();
   const [value, setValue] = useState(0);
 
   const { data: authResData, refetch: handleSignIn } = useQuery({
@@ -57,6 +56,8 @@ function App() {
   if (authResData || isLoading) {
     const { url, section_id } = authResData;
     localStorage.setItem("section_id", section_id);
+
+    // Redirect to Xero OAuth2 login page
     window.location.href = url;
 
     return (
@@ -73,20 +74,7 @@ function App() {
     );
   }
 
-  if (!isAuthed) {
-    return (
-      <Box sx={{ m: 0.5, width: 200 }}>
-        <Button
-          fullWidth
-          size="large"
-          variant="outlined"
-          onClick={() => handleSignIn()}
-        >
-          Sign In with Xero
-        </Button>
-      </Box>
-    );
-  }
+  if (!isAuthed) return <SignInBox handleSignIn={handleSignIn} />;
 
   return (
     <Fragment>
@@ -94,24 +82,13 @@ function App() {
         <Tab value={0} label="Accounts" />
         <Tab value={1} label="Vendors" />
       </Tabs>
-      <TabPanel value={value} index={0} dir={theme.direction}>
+      <TabPanel value={value} index={0}>
         <AccountsList />
       </TabPanel>
-      <TabPanel value={value} index={1} dir={theme.direction}>
+      <TabPanel value={value} index={1}>
         <VendorsList />
       </TabPanel>
-      <Box
-        sx={{
-          position: "absolute",
-          top: 4,
-          right: 4,
-          m: 1,
-        }}
-      >
-        <Button size="large" onClick={handleSignOut}>
-          Sign Out
-        </Button>
-      </Box>
+      <SignOutBox handleSignOut={handleSignOut} />
     </Fragment>
   );
 }
